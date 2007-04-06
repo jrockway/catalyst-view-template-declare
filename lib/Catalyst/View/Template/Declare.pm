@@ -3,10 +3,30 @@ package Catalyst::View::Template::Declare;
 use warnings;
 use strict;
 use base qw(Catalyst::View Template::Declare);
+use NEXT;
+use Template::Declare::Tags;
+
+sub COMPONENT {
+    my $class = shift;
+    
+    # init Template::Declare
+    Template::Declare->init(roots => [$class]);
+    
+    $class->NEXT::COMPONENT(@_);
+}
+
+sub render {
+    my ($self, $c, $template, @args) = @_;
+    return Template::Declare->show($template);
+}
 
 sub process {
-    my ($self, $c) = @_;
-    $c->response->body('Hello, world.');
+    my ($self, $c, @args) = @_;
+
+    my $template = $c->stash->{template} || $c->action;
+    my $html = $self->render($c, $template, @args);
+
+    $c->response->body($html);
 }
 
 1;
