@@ -6,6 +6,8 @@ use base qw(Catalyst::View Template::Declare);
 use NEXT;
 use Template::Declare::Tags;
 
+our $VERSION = '0.00_01';
+
 sub COMPONENT {
     my $class = shift;
     
@@ -38,11 +40,7 @@ Catalyst::View::Template::Declare - Use Template::Declare in Catalyst
 
 =head1 VERSION
 
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
+Version 0.00_01
 
 =head1 SYNOPSIS
 
