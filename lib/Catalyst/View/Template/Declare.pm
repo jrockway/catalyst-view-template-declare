@@ -19,16 +19,28 @@ sub COMPONENT {
     my $mpo = Module::Pluggable::Object->new(require     => 0,
                                              search_path => $class,
                                             );
+    
+    # load sub-templates (and do a bit of magic niceness)
     my @extras = $mpo->plugins;
     foreach my $extra (@extras) {
+        # auto-import TD::Tags into the sub-template
+        eval "package $extra; use Template::Declare::Tags;";
+        
+        # load module (warn on error)
         if (!eval "require $extra"){
             $c->log->warn("Couldn't include $extra: $@");
             next;
         }
-
+        
         $c->log->debug("Loading subtemplate $extra") if $c->debug;
+        
+        # make the templates a subclass of TD (required by TD)
         eval q{push @}. $extra. q{::ISA, 'Template::Declare'};
+
     }
+
+    # auto-import tags into the main module also
+    eval "package $class; use Template::Declare::Tags;";
     
     # init Template::Declare
     Template::Declare->init(roots => [$class, @extras]);
