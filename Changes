@@ -1,4 +1,13 @@
 Revision history for Catalyst-View-Template-Declare
 
+0.00_03 8 April 2007
+        - No longer require "use Template::Declare::Tags"
+        - Add a Catalyst Helper
+
+0.00_02 7 April 2007
+        - Remove duplicate output
+        - Allow templates in subfiles (MyApp::View::TD::*)
+        - Auto-load those subfiles
+
 0.00_01 7 April 2007
         First version, released on an unsuspecting world.
