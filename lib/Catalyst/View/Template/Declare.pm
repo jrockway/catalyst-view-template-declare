@@ -8,7 +8,7 @@ use NEXT;
 use Template::Declare::Tags;
 require Module::Pluggable::Object;
 
-our $VERSION = '0.00_01';
+our $VERSION = '0.00_02';
 
 sub COMPONENT {
     my $self  = shift;
