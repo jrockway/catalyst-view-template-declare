@@ -6,22 +6,44 @@ package Catalyst::View::Template::Declare;
 use base qw(Catalyst::View Template::Declare);
 use NEXT;
 use Template::Declare::Tags;
+require Module::Pluggable::Object;
 
 our $VERSION = '0.00_01';
 
 sub COMPONENT {
-    my $class = shift;
+    my $self  = shift;
+    my $c     = shift;
+    my $class = ref $self || $self;
+    
+    # find sub-templates
+    my $mpo = Module::Pluggable::Object->new(require     => 0,
+                                             search_path => $class,
+                                            );
+    my @extras = $mpo->plugins;
+    foreach my $extra (@extras) {
+        if (!eval "require $extra"){
+            $c->log->warn("Couldn't include $extra: $@");
+            next;
+        }
+
+        $c->log->debug("Loading subtemplate $extra") if $c->debug;
+        eval q{push @}. $extra. q{::ISA, 'Template::Declare'};
+    }
     
     # init Template::Declare
-    Template::Declare->init(roots => [$class]);
+    Template::Declare->init(roots => [$class, @extras]);
     
-    $class->NEXT::COMPONENT(@_);
+    # init superclasses
+    $self->NEXT::COMPONENT(@_);
 }
 
 sub render {
     my ($self, $c, $template, @args) = @_;
     $context = $c;
-    return Template::Declare->show($template);
+    Template::Declare->new_buffer_frame;
+    my $out = Template::Declare->show($template);
+    Template::Declare->end_buffer_frame;
+    return $out;
 }
 
 sub process {
