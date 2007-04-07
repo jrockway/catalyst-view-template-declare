@@ -8,7 +8,7 @@ use NEXT;
 use Template::Declare::Tags;
 require Module::Pluggable::Object;
 
-our $VERSION = '0.00_02';
+our $VERSION = '0.00_03';
 
 sub COMPONENT {
     my $self  = shift;
@@ -84,7 +84,7 @@ Catalyst::View::Template::Declare - Use Template::Declare with Catalyst
 
 =head1 VERSION
 
-Version 0.00_01
+Version 0.00_03
 
 =head1 SYNOPSIS
 
