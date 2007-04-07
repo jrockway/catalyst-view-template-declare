@@ -88,6 +88,31 @@ Version 0.00_01
 
 =head1 SYNOPSIS
 
+Create the view:
+
+     myapp_create.pl view TD Template::Declare
+
+Add templates in C<< MyApp::View::TD::<name> >>:
+
+     package MyApp::View::TD::Test;
+     template foo => sub { html {} };
+     template bar => sub {   ...   };
+     1;
+
+Then use the templates from your application:
+
+     $c->stash(template => 'foo');
+     $c->detach('View::TD');
+
+You can get at the Catalyst context via the C<<c>> package:
+
+     template foo => sub { "This is the ". c->action. " action." };
+     template bar => sub { "Hello, ". c->stash->{world} };
+
+Have fun.  This is all very experimental.
+
+=head1 DESCRIPTION
+
 Very experimental.
 
 Make a view:
@@ -109,7 +134,7 @@ In your app:
     $c->stash(title => 'test');
     $c->detach('View::TD');
 
-Outputs:
+And get the output:
 
     <html><head><title>test</title></head><body>Hello, world</body></html>
 
