@@ -79,6 +79,20 @@ Outputs:
 
     <html><head><title>test</title></head><body>Hello, world</body></html>
 
+=head1 METHODS
+
+=head2 process
+
+Render the template specified by the action or C<< $c->stash->template >>.
+
+=head2 render($c, $template)
+
+Render the template named by C<$template> and return the text.
+
+=head2 COMPONENT
+
+Private
+
 =head1 AUTHOR
 
 Jonathan Rockway, C<< <jrockway at cpan.org> >>
