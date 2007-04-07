@@ -54,6 +54,31 @@ Version 0.00_01
 
 =head1 SYNOPSIS
 
+Very experimental.
+
+Make a view:
+
+    package MyApp::View::TD;
+    use base 'Catalyst::View::Template::Declare';
+    use Template::Declare::Tags;
+     
+    template foo => sub { 
+        html { 
+            head { title { c->stash->{title} } };
+            body { "Hello, world" }
+          }
+    };
+
+In your app:
+
+    $c->stash(template => 'foo');
+    $c->stash(title => 'test');
+    $c->detach('View::TD');
+
+Outputs:
+
+    <html><head><title>test</title></head><body>Hello, world</body></html>
+
 =head1 AUTHOR
 
 Jonathan Rockway, C<< <jrockway at cpan.org> >>
