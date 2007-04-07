@@ -101,6 +101,21 @@ Outputs:
 
     <html><head><title>test</title></head><body>Hello, world</body></html>
 
+You can also spread your templates out over multiple files.  If your
+view is called MyApp::View::TD, then everything in MyApp::View::TD::*
+will be included and templates declared in those files will be available
+as though they were declared in your main view class.
+
+Example:
+
+    package MyApp::View::TD::Foo;
+    use Template::Declare::Tags;
+    template foo => sub { ... };
+    1;
+
+Then you can set C<< $c->stash(template => 'foo') >> and everything
+will work as you expect.
+
 =head1 METHODS
 
 =head2 process
