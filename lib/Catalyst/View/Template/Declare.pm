@@ -1,9 +1,8 @@
+use warnings;
+use strict;
 my $context;
 
 package Catalyst::View::Template::Declare;
-
-use warnings;
-use strict;
 use base qw(Catalyst::View Template::Declare);
 use NEXT;
 use Template::Declare::Tags;
@@ -69,31 +68,7 @@ your bug as I make changes.
 
 =head1 SUPPORT
 
-You can find documentation for this module with the perldoc command.
-
-    perldoc Catalyst::View::Template::Declare
-
-You can also look for information at:
-
-=over 4
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Catalyst-View-Template-Declare>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Catalyst-View-Template-Declare>
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Catalyst-View-Template-Declare>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Catalyst-View-Template-Declare>
-
-=back
+Visit #catalyst on irc.perl.org, submit an RT ticket, or send me an e-mail.
 
 =head1 ACKNOWLEDGEMENTS
 
