@@ -1,3 +1,5 @@
+my $context;
+
 package Catalyst::View::Template::Declare;
 
 use warnings;
@@ -25,10 +27,19 @@ sub render {
 sub process {
     my ($self, $c, @args) = @_;
 
+    $context = $c;
     my $template = $c->stash->{template} || $c->action;
     my $html = $self->render($c, $template, @args);
 
     $c->response->body($html);
+}
+
+package c;
+our $AUTOLOAD;
+sub AUTOLOAD {
+    shift; # kill class
+    $AUTOLOAD =~ s/^c:://; # kill package c
+    return $context->$AUTOLOAD(@_);
 }
 
 1;
@@ -36,7 +47,7 @@ __END__
 
 =head1 NAME
 
-Catalyst::View::Template::Declare - Use Template::Declare in Catalyst
+Catalyst::View::Template::Declare - Use Template::Declare with Catalyst
 
 =head1 VERSION
 
@@ -87,6 +98,8 @@ L<http://search.cpan.org/dist/Catalyst-View-Template-Declare>
 =head1 ACKNOWLEDGEMENTS
 
 L<Template::Declare>
+
+L<Jifty>
 
 =head1 COPYRIGHT & LICENSE
 
