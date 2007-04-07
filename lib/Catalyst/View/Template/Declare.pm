@@ -20,13 +20,13 @@ sub COMPONENT {
 
 sub render {
     my ($self, $c, $template, @args) = @_;
+    $context = $c;
     return Template::Declare->show($template);
 }
 
 sub process {
     my ($self, $c, @args) = @_;
 
-    $context = $c;
     my $template = $c->stash->{template} || $c->action;
     my $html = $self->render($c, $template, @args);
 
