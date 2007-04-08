@@ -84,4 +84,6 @@ Template::Declare View for [% app %].
 
 L<[% app %]>
 
+=cut
+
 1;
