@@ -1,5 +1,9 @@
 Revision history for Catalyst-View-Template-Declare
 
+0.01    9 July 2007
+        - Require T::D::Tags again (Catalyst pre-loading issue)
+        - Helper generates valid code now
+
 0.00_03 8 April 2007
         - No longer require "use Template::Declare::Tags"
         - Add a Catalyst Helper
