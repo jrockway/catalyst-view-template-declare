@@ -51,7 +51,6 @@ use warnings;
 use base 'Catalyst::View::Template::Declare';
 use Template::Declare::Tags;
 
-
 # Test Template, replace with your own
 # template test => sub {
 #     html {
@@ -67,6 +66,7 @@ use Template::Declare::Tags;
 #
 # You can also put templates in separate modules, each under the
 # [% class %]::* prefix.
+
   
 =head1 NAME
 
@@ -83,6 +83,12 @@ Template::Declare View for [% app %].
 =head1 SEE ALSO
 
 L<[% app %]>
+
+L<Catalyst::View::Template::Declare>
+
+L<Template::Declare::Tags>
+
+L<Template::Declare>
 
 =cut
 

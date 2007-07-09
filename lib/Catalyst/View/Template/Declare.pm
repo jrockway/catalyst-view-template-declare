@@ -8,7 +8,7 @@ use NEXT;
 use Template::Declare::Tags;
 require Module::Pluggable::Object;
 
-our $VERSION = '0.00_03';
+our $VERSION = '0.01';
 
 sub COMPONENT {
     my $self  = shift;
@@ -23,24 +23,17 @@ sub COMPONENT {
     # load sub-templates (and do a bit of magic niceness)
     my @extras = $mpo->plugins;
     foreach my $extra (@extras) {
-        # auto-import TD::Tags into the sub-template
-        eval "package $extra; use Template::Declare::Tags;";
+        $c->log->debug("Loading subtemplate $extra") if $c->debug;
         
         # load module (warn on error)
         if (!eval "require $extra"){
-            $c->log->warn("Couldn't include $extra: $@");
-            next;
+            die "Couldn't include $extra: $@";
         }
-        
-        $c->log->debug("Loading subtemplate $extra") if $c->debug;
         
         # make the templates a subclass of TD (required by TD)
         eval q{push @}. $extra. q{::ISA, 'Template::Declare'};
 
     }
-
-    # auto-import tags into the main module also
-    eval "package $class; use Template::Declare::Tags;";
     
     # init Template::Declare
     Template::Declare->init(roots => [$class, @extras]);
@@ -52,9 +45,15 @@ sub COMPONENT {
 sub render {
     my ($self, $c, $template, @args) = @_;
     $context = $c;
-    Template::Declare->new_buffer_frame;
-    my $out = Template::Declare->show($template);
-    Template::Declare->end_buffer_frame;
+    my $out;
+    eval {
+        Template::Declare->new_buffer_frame;
+        $out = Template::Declare->show($template);
+        Template::Declare->end_buffer_frame;
+    };
+    if ($@) {
+        $c->error($@);
+    }
     return $out;
 }
 
@@ -84,7 +83,7 @@ Catalyst::View::Template::Declare - Use Template::Declare with Catalyst
 
 =head1 VERSION
 
-Version 0.00_03
+Version 0.01
 
 =head1 SYNOPSIS
 
@@ -109,11 +108,9 @@ You can get at the Catalyst context via the C<<c>> package:
      template foo => sub { "This is the ". c->action. " action." };
      template bar => sub { "Hello, ". c->stash->{world} };
 
-Have fun.  This is all very experimental.
+Have fun.  This is all somewhat experimental and subject to change.
 
 =head1 DESCRIPTION
-
-Very experimental.
 
 Make a view:
 
@@ -165,7 +162,7 @@ Render the template named by C<$template> and return the text.
 
 =head2 COMPONENT
 
-Private
+Not for you.
 
 =head1 AUTHOR
 
