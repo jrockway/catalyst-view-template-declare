@@ -97,6 +97,8 @@ Create the view:
 Add templates in C<< MyApp::View::TD::<name> >>:
 
      package MyApp::View::TD::Test;
+     use Template::Declare::Tags;
+
      template foo => sub { html {} };
      template bar => sub {   ...   };
      1;
