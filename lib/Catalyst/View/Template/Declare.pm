@@ -23,7 +23,7 @@ sub COMPONENT {
     # load sub-templates (and do a bit of magic niceness)
     my @extras = $mpo->plugins;
     foreach my $extra (@extras) {
-        $c->log->debug("Loading subtemplate $extra") if $c->debug;
+        $c->log->info("Loading subtemplate $extra");
         
         # load module (warn on error)
         if (!eval "require $extra"){
@@ -31,8 +31,11 @@ sub COMPONENT {
         }
         
         # make the templates a subclass of TD (required by TD)
-        eval q{push @}. $extra. q{::ISA, 'Template::Declare'};
-
+        {
+            no strict 'refs';
+            push @{$extra. "::ISA"}, 'Template::Declare';
+        }
+        
     }
     
     # init Template::Declare
