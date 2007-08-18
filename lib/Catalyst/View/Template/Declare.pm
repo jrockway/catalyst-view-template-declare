@@ -91,7 +91,7 @@ Add templates in C<< MyApp::View::TD::<name> >>:
 
 Then use the templates from your application:
 
-     $c->stash(template => 'foo');
+     $c->view('TD')->template('foo');
      $c->detach('View::TD');
 
 You can get at the Catalyst context via the C<<c>> package:
@@ -111,7 +111,7 @@ Make a view:
 
 Make a template:
 
-    package MyApp::View::TD::Main;
+    package MyApp::View::TD::Root;
     use Template::Declare::Tags;
      
     template foo => sub { 
@@ -150,7 +150,9 @@ will work as you expect.
 
 =head2 process
 
-Render the template specified by the action or C<< $c->stash->template >>.
+Render the template in C<< $self->template >>; see
+L<Catalyst::View::Templated> for information on how to specify the
+template.
 
 =head2 render($template)
 
@@ -175,6 +177,8 @@ your bug as I make changes.
 =head1 SUPPORT
 
 Visit #catalyst on irc.perl.org, submit an RT ticket, or send me an e-mail.
+
+The git repository is at L<http://git.jrock.us/>.
 
 =head1 SEE ALSO
 
