@@ -24,6 +24,7 @@ t/lib/TestApp.pm
 t/lib/TestApp/Controller/Root.pm
 t/lib/TestApp/View/TD.pm
 t/lib/TestApp/View/TD/IncludeOthers.pm
+t/lib/TestApp/View/TD/Main.pm
 t/lib/TestApp/View/TD/Subtemplate.pm
 t/live.t
 t/pod-coverage.t
