@@ -3,12 +3,11 @@ use strict;
 my $context;
 
 package Catalyst::View::Template::Declare;
-use base qw(Catalyst::View Template::Declare);
-use NEXT;
-use Template::Declare::Tags;
+use base qw(Catalyst::View::Templated);
+use Class::C3;
 require Module::Pluggable::Object;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub COMPONENT {
     my $self  = shift;
@@ -25,7 +24,7 @@ sub COMPONENT {
     foreach my $extra (@extras) {
         $c->log->info("Loading subtemplate $extra");
         
-        # load module (warn on error)
+        # load module
         if (!eval "require $extra"){
             die "Couldn't include $extra: $@";
         }
@@ -42,31 +41,18 @@ sub COMPONENT {
     Template::Declare->init(roots => [$class, @extras]);
     
     # init superclasses
-    $self->NEXT::COMPONENT(@_);
+    $self->next::method($c, @_);
 }
 
-sub render {
-    my ($self, $c, $template, @args) = @_;
-    $context = $c;
-    my $out;
-    eval {
-        Template::Declare->new_buffer_frame;
-        $out = Template::Declare->show($template);
-        Template::Declare->end_buffer_frame;
-    };
-    if ($@) {
-        $c->error($@);
-    }
+sub _render {
+    my ($self, $template, $stash, $args) = @_;
+    $context = $self->context;
+
+    Template::Declare->new_buffer_frame;
+    my $out = Template::Declare->show($template);
+    Template::Declare->end_buffer_frame;
+    
     return $out;
-}
-
-sub process {
-    my ($self, $c, @args) = @_;
-
-    my $template = $c->stash->{template} || $c->action;
-    my $html = $self->render($c, $template, @args);
-
-    $c->response->body($html);
 }
 
 package c;
@@ -86,7 +72,7 @@ Catalyst::View::Template::Declare - Use Template::Declare with Catalyst
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -121,6 +107,11 @@ Make a view:
 
     package MyApp::View::TD;
     use base 'Catalyst::View::Template::Declare';
+    1;
+
+Make a template:
+
+    package MyApp::View::TD::Main;
     use Template::Declare::Tags;
      
     template foo => sub { 
@@ -132,7 +123,7 @@ Make a view:
 
 In your app:
 
-    $c->stash(template => 'foo');
+    $c->view('TD')->template('foo');
     $c->stash(title => 'test');
     $c->detach('View::TD');
 
@@ -140,19 +131,19 @@ And get the output:
 
     <html><head><title>test</title></head><body>Hello, world</body></html>
 
-You can also spread your templates out over multiple files.  If your
+You can spread your templates out over multiple files.  If your
 view is called MyApp::View::TD, then everything in MyApp::View::TD::*
 will be included and templates declared in those files will be available
-as though they were declared in your main view class.
+as though they were declared in your main view class. 
 
 Example:
 
     package MyApp::View::TD::Foo;
     use Template::Declare::Tags;
-    template foo => sub { ... };
+    template bar => sub { ... };
     1;
 
-Then you can set C<< $c->stash(template => 'foo') >> and everything
+Then you can set C<< $c->view('TD')->template('bar') >> and everything
 will work as you expect.
 
 =head1 METHODS
@@ -161,9 +152,9 @@ will work as you expect.
 
 Render the template specified by the action or C<< $c->stash->template >>.
 
-=head2 render($c, $template)
+=head2 render($template)
 
-Render the template named by C<$template> and return the text.
+Render the template named by C<$template> and return the output.
 
 =head2 COMPONENT
 
@@ -184,6 +175,10 @@ your bug as I make changes.
 =head1 SUPPORT
 
 Visit #catalyst on irc.perl.org, submit an RT ticket, or send me an e-mail.
+
+=head1 SEE ALSO
+
+L<Catalyst::View::Templated>
 
 =head1 ACKNOWLEDGEMENTS
 
