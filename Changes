@@ -1,5 +1,9 @@
 Revision history for Catalyst-View-Template-Declare
 
+0.02    18 August 2007
+        - Convert to Catalyst::View::Templated API, deprecate
+          templates in subclass
+
 0.01    9 July 2007
         - Require T::D::Tags again (Catalyst pre-loading issue)
         - Helper generates valid code now
