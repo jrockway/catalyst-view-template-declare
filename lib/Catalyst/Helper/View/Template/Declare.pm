@@ -47,26 +47,14 @@ __compclass__
 package [% class %];
 use strict;
 use warnings;
-
 use base 'Catalyst::View::Template::Declare';
-use Template::Declare::Tags;
+1;
 
-# Test Template, replace with your own
-# template test => sub {
-#     html {
-#         head {
-#             title {"This is a test" }
-#         };
-#         body {
-#             h1 { "This is a test" };
-#             p { "Welcome to Template::Declare." }
-#         }
-#     }
-# };
-#
-# You can also put templates in separate modules, each under the
-# [% class %]::* prefix.
+# Put templates in separate modules, each under the 
+# [% class %]::* namespace.  Be sure to "use Template::Declare::Tags"
+# in each one.
 
+__END__
   
 =head1 NAME
 
@@ -92,4 +80,3 @@ L<Template::Declare>
 
 =cut
 
-1;
