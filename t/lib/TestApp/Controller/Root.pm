@@ -22,7 +22,12 @@ sub test_sub :Local {
 
 sub test_includeother :Local {
     my ($self, $c, @args) = @_;
-    $c->stash(template => 'includeother');
+    $c->view('TD')->template('includeother');
+}
+
+sub myapp_methods :Local {
+    my ($self, $c, @args) = @_;
+    $c->view('TD')->template('methods');
 }
 
 sub end :Private {

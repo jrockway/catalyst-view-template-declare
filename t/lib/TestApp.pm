@@ -7,4 +7,8 @@ use Catalyst;
 
 TestApp->setup;
 
+sub hello_world {
+    return 'Hello, world.';
+}
+
 1;

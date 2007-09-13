@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use FindBin qw($Bin);
 use lib "$Bin/lib";
 use Catalyst::Test qw(TestApp);
@@ -17,4 +17,4 @@ is(get('/test_includeother'),
    "<p>This comes before the other template.</p>".
    "\n<p>This is a subtemplate.</p>",
    'a subtemplate that includes another subtemplate');
-
+is(get('/myapp_methods'), '<p>Hello, world.</p>', 'can call $c->... ok');

@@ -13,4 +13,8 @@ template stash => sub {
     p { "Hello, ". c->stash->{world} };
 };
 
+template methods => sub {
+    p { c->hello_world };
+};
+
 1;
