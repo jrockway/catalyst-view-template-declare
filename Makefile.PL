@@ -6,6 +6,7 @@ requires 'Catalyst::View::Templated';
 requires 'Template::Declare' => '0.21';
 requires 'Class::C3';
 requires 'Module::Pluggable::Object';
+requires 'PadWalker';
 
 build_requires 'Test::More';
 build_requires 'Catalyst::Runtime' => '5.7000';

@@ -1,8 +1,6 @@
-use warnings;
-use strict;
-my $context;
-
 package Catalyst::View::Template::Declare;
+use strict;
+use warnings;
 use base qw(Catalyst::View::Templated);
 use Class::C3;
 require Module::Pluggable::Object;
@@ -46,21 +44,33 @@ sub COMPONENT {
 
 sub _render {
     my ($self, $template, $stash, $args) = @_;
-    $context = $self->context;
 
     Template::Declare->new_buffer_frame;
     my $out = Template::Declare->show($template);
     Template::Declare->end_buffer_frame;
 
     $out =~ s/^\n+//g; # kill leading newlines
-    
     return $out;
 }
 
 package c;
+use PadWalker qw(peek_my);
 our $AUTOLOAD;
 sub AUTOLOAD {
     shift; # kill class
+
+    # walk up the stack looking for the Catalyst context
+    # in a lexical somewhere (evil, yes.)
+    my $frames_up = 1;
+    my $context;
+    while($frames_up < 30 && !$context){
+        ($context) = 
+          map { $$_ } 
+            grep {eval{$$_->isa('Catalyst')}} 
+              values %{peek_my($frames_up++)};
+    }
+    die "INTERNAL ERROR: No Catalyst context found!" if !$context;
+    
     $AUTOLOAD =~ s/^c:://; # kill package c
     return $context->$AUTOLOAD(@_);
 }
