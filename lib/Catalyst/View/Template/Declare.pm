@@ -7,7 +7,7 @@ use base qw(Catalyst::View::Templated);
 use Class::C3;
 require Module::Pluggable::Object;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub COMPONENT {
     my $self  = shift;
@@ -51,6 +51,8 @@ sub _render {
     Template::Declare->new_buffer_frame;
     my $out = Template::Declare->show($template);
     Template::Declare->end_buffer_frame;
+
+    $out =~ s/^\n+//g; # kill leading newlines
     
     return $out;
 }
