@@ -1,5 +1,8 @@
 Revision history for Catalyst-View-Template-Declare
 
+0.03    14 September 2007
+        - use a smarter way of finding the Catalyst context
+
 0.02    18 August 2007
         - Convert to Catalyst::View::Templated API, deprecate
           templates in subclass
