@@ -63,7 +63,7 @@ sub AUTOLOAD {
     # in a lexical somewhere (evil, yes.)
     my $frames_up = 1;
     my $context;
-    while($frames_up < 30 && !$context){
+    while($frames_up < 300 && !$context){
         ($context) = 
           map { $$_ } 
             grep {eval{$$_->isa('Catalyst')}} 
