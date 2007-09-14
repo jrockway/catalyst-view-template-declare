@@ -3,7 +3,7 @@ use inc::Module::Install;
 name 'Catalyst-View-Template-Declare';
 all_from 'lib/Catalyst/View/Template/Declare.pm';
 requires 'Catalyst::View::Templated';
-requires 'Template::Declare' => '0.21';
+requires 'Template::Declare' => '0.26';
 requires 'Class::C3';
 requires 'Module::Pluggable::Object';
 requires 'PadWalker';
