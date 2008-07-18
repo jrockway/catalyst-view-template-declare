@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use FindBin qw($Bin);
 use lib "$Bin/lib";
 use Catalyst::Test qw(TestApp);
@@ -18,3 +18,5 @@ is(get('/test_includeother'),
    "\n<p>This is a subtemplate.</p>",
    'a subtemplate that includes another subtemplate');
 is(get('/myapp_methods'), '<p>Hello, world.</p>', 'can call $c->... ok');
+is(get('/test_magic_stash'), "<p>Hello, Terra</p>", 
+     'getting data from $_ stash works');

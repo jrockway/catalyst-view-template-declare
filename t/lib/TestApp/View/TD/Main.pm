@@ -10,7 +10,13 @@ template action_name => sub {
 };
 
 template stash => sub {
-    p { "Hello, ". c->stash->{world} };
+    my ($self, $c) = @_;
+    p { "Hello, ". $c->stash->{world} };
+};
+
+template magic_stash => sub {
+    my ($self, $c) = @_;
+    p { "Hello, $_{world}" };
 };
 
 template methods => sub {

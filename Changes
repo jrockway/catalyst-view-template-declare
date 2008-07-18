@@ -1,5 +1,9 @@
 Revision history for Catalyst-View-Template-Declare
 
+0.04
+        - Pass arguments to template functions. Patch from David
+          Wheeler.
+
 0.03    14 September 2007
         - use a smarter way of finding the Catalyst context
         - strip off leading newlines (so that XML is valid)

@@ -15,6 +15,12 @@ sub test_stash :Local {
     $c->stash(template => 'stash');
 }
 
+sub test_magic_stash :Local {
+    my ($self, $c, @args) = @_;
+    $c->stash(world => 'Terra');
+    $c->stash(template => 'magic_stash');
+}
+
 sub test_sub :Local {
     my ($self, $c, @args) = @_;
     $c->stash(template => 'subtemplate');

@@ -43,10 +43,11 @@ sub COMPONENT {
 }
 
 sub _render {
-    my ($self, $template, $stash, $args) = @_;
+    my ($self, $template) = (shift, shift);
 
     Template::Declare->new_buffer_frame;
-    my $out = Template::Declare->show($template);
+    local *_ = $_[0];
+    my $out = Template::Declare->show($template, $self->context, @_);
     Template::Declare->end_buffer_frame;
 
     $out =~ s/^\n+//g; # kill leading newlines
@@ -106,10 +107,20 @@ Then use the templates from your application:
      $c->view('TD')->template('foo');
      $c->detach('View::TD');
 
-You can get at the Catalyst context via the C<<c>> package:
+The Catalyst context is passed as the second agument to the templates:
 
-     template foo => sub { "This is the ". c->action. " action." };
-     template bar => sub { "Hello, ". c->stash->{world} };
+     template foo => sub {
+         my ($self, $c) = @_;
+         return 'This is the '. $c->action. ' action.';
+     };
+
+The Catalyst stash is passed as the third argument, but is also
+available via the glocal C<$_> variable for the duration of the
+template:
+
+     template bar => sub {
+         return "Hello, $_{world}";
+     };
 
 Have fun.  This is all somewhat experimental and subject to change.
 
@@ -125,10 +136,11 @@ Make a template:
 
     package MyApp::View::TD::Root;
     use Template::Declare::Tags;
-     
+
     template foo => sub { 
-        html { 
-            head { title { c->stash->{title} } };
+        my ($self, $c) = @_;
+        html {
+            head { title { $c->stash->{title} } };
             body { "Hello, world" }
           }
     };
@@ -158,6 +170,35 @@ Example:
 Then you can set C<< $c->view('TD')->template('bar') >> and everything
 will work as you expect.
 
+The arguments passed to the templates are:
+
+=over
+
+=item C<$self>
+
+The object or package name in which the template is defined.
+
+=item C<$c>
+
+The Catalyst context object.
+
+=item C<$stash>
+
+A copy of the Catalyst stash, also available via C<$_>. Modifications to this
+copy of the stash will have no effect on the contents of C<< $c->stash >>.
+
+=item C<$args>
+
+Any arguments passed to C<render()>.
+
+=back
+
+For those stuck with a version of Template::Declare older then 0.26, no
+arguments will be passed to the templates. But you can still use the
+otherwise-deprecated C<c> package to get at the Catalyst context:
+
+    template bar => sub { "Hello, ". c->stash->{world} };
+
 =head1 METHODS
 
 =head2 process
@@ -166,7 +207,7 @@ Render the template in C<< $self->template >>; see
 L<Catalyst::View::Templated> for information on how to specify the
 template.
 
-=head2 render($template)
+=head2 render($template, @args)
 
 Render the template named by C<$template> and return the output.
 
