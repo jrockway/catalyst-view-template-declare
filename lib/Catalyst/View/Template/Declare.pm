@@ -5,39 +5,39 @@ use base qw(Catalyst::View::Templated);
 use Class::C3;
 require Module::Pluggable::Object;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub COMPONENT {
     my $self  = shift;
     my $c     = shift;
     my $class = ref $self || $self;
-    
+
     # find sub-templates
     my $mpo = Module::Pluggable::Object->new(require     => 0,
                                              search_path => $class,
                                             );
-    
+
     # load sub-templates (and do a bit of magic niceness)
     my @extras = $mpo->plugins;
     foreach my $extra (@extras) {
         $c->log->info("Loading subtemplate $extra");
-        
+
         # load module
         if (!eval "require $extra"){
             die "Couldn't include $extra: $@";
         }
-        
+
         # make the templates a subclass of TD (required by TD)
         {
             no strict 'refs';
             push @{$extra. "::ISA"}, 'Template::Declare';
         }
-        
+
     }
-    
+
     # init Template::Declare
     Template::Declare->init(roots => [$class, @extras]);
-    
+
     # init superclasses
     $self->next::method($c, @_);
 }
@@ -65,13 +65,13 @@ sub AUTOLOAD {
     my $frames_up = 1;
     my $context;
     while($frames_up < 300 && !$context){
-        ($context) = 
-          map { $$_ } 
-            grep {eval{$$_->isa('Catalyst')}} 
+        ($context) =
+          map { $$_ }
+            grep {eval{$$_->isa('Catalyst')}}
               values %{peek_my($frames_up++)};
     }
     die "INTERNAL ERROR: No Catalyst context found!" if !$context;
-    
+
     $AUTOLOAD =~ s/^c:://; # kill package c
     return $context->$AUTOLOAD(@_);
 }
@@ -137,7 +137,7 @@ Make a template:
     package MyApp::View::TD::Root;
     use Template::Declare::Tags;
 
-    template foo => sub { 
+    template foo => sub {
         my ($self, $c) = @_;
         html {
             head { title { $c->stash->{title} } };
@@ -158,7 +158,7 @@ And get the output:
 You can spread your templates out over multiple files.  If your
 view is called MyApp::View::TD, then everything in MyApp::View::TD::*
 will be included and templates declared in those files will be available
-as though they were declared in your main view class. 
+as though they were declared in your main view class.
 
 Example:
 
